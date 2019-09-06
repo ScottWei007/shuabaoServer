@@ -1,0 +1,90 @@
+#tomcat啓動端口
+server:
+    port: 8080
+
+#socket服務器端口
+socketserver:
+    port: 28888
+
+#rpc服务器
+rpcserver:
+    name: socketserver
+    id: 1
+    port: 45000
+    ip: 47.106.105.52
+
+#配置環境模式（dev開發環境，test測試環境，prod生產環境）
+spring:
+    profiles:
+      active: test
+
+#配置mysql數據源，可以配置多個數據源
+---
+spring:
+    profiles: dev
+    commondatasource:
+        url: jdbc:mysql://47.106.105.52:3306/test?useUnicode=true&amp;characterEncoding=utf-8&generateSimpleParameterMetadata=true
+        username: saer
+        password: saer
+        driver-class-name: com.mysql.jdbc.Driver
+#  otherDataSource:
+#       url: jdbc:mysql://47.106.105.52:3306/test?useUnicode=true&amp;characterEncoding=utf-8&generateSimpleParameterMetadata=true
+#       username: saer
+#       password: saer
+#       driver-class-name: com.mysql.jdbc.Driver
+---
+spring:
+    profiles: test
+    commondatasource:
+        url: jdbc:mysql://47.106.105.52:3306/test?useUnicode=true&amp;characterEncoding=utf-8&generateSimpleParameterMetadata=true
+        username: saer
+        password: saer
+        driver-class-name: com.mysql.jdbc.Driver
+---
+spring:
+    profiles: prod
+    commondatasource:
+        url: jdbc:mysql://47.106.105.52:3306/test?useUnicode=true&amp;characterEncoding=utf-8&generateSimpleParameterMetadata=true
+        username: saer
+        password: saer
+        driver-class-name: com.mysql.jdbc.Driver
+---
+spring:
+    profiles: dev
+    redis:
+      common:
+          host: 47.106.105.52
+          port: 6379
+          password: saer
+---
+spring:
+    profiles: test
+    redis:
+      common:
+          host: 47.106.105.52
+          port: 6379
+          password: saer
+---
+spring:
+    profiles: prod
+    redis:
+      common:
+          host: 47.106.105.52
+          port: 6379
+          password: saer
+
+---
+spring:
+    profiles: dev
+    zookeeper:
+        host: 47.106.105.52:2181
+---
+spring:
+    profiles: test
+    zookeeper:
+        host: 47.106.105.52:2181
+---
+spring:
+    profiles: prod
+    zookeeper:
+        host: 47.106.105.52:2181

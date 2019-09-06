@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 這個mapper的namespace要與mapper包下的Dao接口對應, 這樣會自動解析sql文件-->
+<mapper namespace="com.shuabao.core.mapper.TestDao">
+
+    <!-- id屬性要與Dao接口的方法名對應, resultType就是返回實體類-->
+    <select id="findAllEntity" resultType="com.shuabao.core.entity.TestEntity">
+        select * from test
+    </select>
+
+    <select id="findEntityById" parameterType="java.lang.Integer" resultType="com.shuabao.core.entity.TestEntity">
+        select * from test where id = #{id}
+    </select>
+
+    <insert id="addEntity" parameterType="com.shuabao.core.entity.TestEntity">
+        insert into test (`name`) values (#{name})
+    </insert>
+
+    <update id="updateEntity" parameterType="com.shuabao.core.entity.TestEntity">
+        update test set `name` = #{name} where id = #{id}
+    </update>
+
+    <delete id="deleteEntity">
+         delete from test  where id = #{id}
+    </delete>
+
+</mapper>

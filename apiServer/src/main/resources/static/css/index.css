@@ -1,0 +1,8 @@
+@charset "utf-8";
+body{background:#0085FE;margin:0;padding:0;}
+.tips{    width: 500px;
+    margin: 50px auto 0;
+    color: #fff;
+    font-size: 40px;
+    text-align: center;
+    }

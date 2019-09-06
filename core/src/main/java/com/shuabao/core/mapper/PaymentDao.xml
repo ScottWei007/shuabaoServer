@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 這個mapper的namespace要與mapper包下的Dao接口對應, 這樣會自動解析sql文件-->
+<mapper namespace="com.shuabao.core.mapper.PaymentDao">
+
+    <insert id="addOrder" parameterType="com.shuabao.core.entity.PaymentEntity">
+        INSERT INTO payment_order_info(oid, uid, os, cid, rid, paytype, payment, amount, country, notifyurl, prepayorderId, ip)
+        VALUES (#{oid},#{uid},#{os},#{cid},#{rid},#{paytype},#{payment},#{amount},#{country},#{notifyurl},#{prepayorderId},#{ip})
+    </insert>
+
+    <select id="getCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from order_receipt where receiptMd5 = #{receiptMd5} and `status` = 1
+    </select>
+
+    <select id="addReceipt" resultType="java.lang.Integer">
+        insert into order_receipt(receiptMd5, receipt, oid)
+        values (#{receiptMd5}, #{receipt}, #{oid})
+    </select>
+
+    <select id="updateReceipt" parameterType="java.lang.String" resultType="java.lang.Integer">
+        update order_receipt set `status` =  1 where receiptMd5 = #{receiptMd5}
+    </select>
+
+    <select id="getOrderById" parameterType="java.lang.String" resultType="com.shuabao.core.entity.PaymentEntity"  >
+       select * from payment_order_info where oid = #{oid}
+    </select>
+
+    <select id="updateOrderStatus" parameterType="com.shuabao.core.entity.PaymentEntity" resultType="java.lang.Integer">
+        update payment_order_info set `status` =  #{status}
+        <if test="notifyoid != null">
+            , notifyoid = #{notifyoid}
+        </if>
+        <if test="notifytime != null">
+            , notifytime = #{notifytime}
+        </if>
+        where oid = #{oid}
+    </select>
+
+</mapper>

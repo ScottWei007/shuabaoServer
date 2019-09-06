@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 這個mapper的namespace要與mapper包下的Dao接口對應, 這樣會自動解析sql文件-->
+<mapper namespace="com.shuabao.core.mapper.SettingDao">
+
+    <select id="getHomePageTags" resultType="com.shuabao.core.entity.TagEntity">
+        SELECT * FROM setting_homepage_tag
+    </select>
+
+    <select id="getHomePageAdvertises" resultType="com.shuabao.core.entity.AdvertiseEntity">
+        SELECT * FROM setting_homepage_advertise
+    </select>
+
+    <select id="getAllRecharges" resultType="com.shuabao.core.entity.RechargeEntity">
+        SELECT * FROM setting_recharge
+    </select>
+
+</mapper>

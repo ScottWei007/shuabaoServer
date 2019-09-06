@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.shuabao</groupId>
+    <artifactId>apiServer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>apiServer</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.shuabao</groupId>
+        <artifactId>shuabao</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <!--依賴core-->
+        <dependency>
+            <groupId>com.shuabao</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <!--spring-boot-starter-web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.0.4.RELEASE</version>
+        </dependency>
+        <!--google手機號碼處理-->
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+            <version>8.9.3</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                 <configuration>
+                     <mainClass>com.shuabao.apiServer.ApiApplication</mainClass>
+                     <layout>ZIP</layout>
+                 </configuration>
+                 <executions>
+                     <execution>
+                         <goals>
+                             <!--可以把依赖的包都打包到生成的Jar包中-->
+                             <goal>repackage</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!--打包時包含mybatis的xml文件-->
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <!--打包時包含配置文件-->
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+</project>

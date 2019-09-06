@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 這個mapper的namespace要與mapper包下的Dao接口對應, 這樣會自動解析sql文件-->
+<mapper namespace="com.shuabao.core.mapper.UserDao">
+
+    <insert id="buildUid" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="java.util.Map">
+        REPLACE INTO uid_sequence(a) VALUES('a');
+    </insert>
+
+    <insert id="addVerificationCode" parameterType="com.shuabao.core.entity.VerificationCodeEntity">
+        INSERT INTO phone_verification_code(phone, countryCode, verificationCode, times, logTime)
+		VALUES (#{phone}, #{countryCode}, #{verificationCode},#{times},#{logTime})
+		ON DUPLICATE KEY UPDATE verificationCode = #{verificationCode}, times = times + #{times},logTime = #{logTime}
+    </insert>
+
+    <select id="getVerificationCodeByPhone" parameterType="com.shuabao.core.entity.VerificationCodeEntity" resultType="com.shuabao.core.entity.VerificationCodeEntity">
+        SELECT * FROM phone_verification_code WHERE phone = #{phone} AND countryCode = #{countryCode}
+    </select>
+
+    <select id="getUserByPhone" resultType="com.shuabao.core.entity.UserInfoEntity">
+        SELECT * FROM user_phone_info WHERE phone = #{phone}
+    </select>
+
+    <select id="getPhoneByUid" resultType="com.shuabao.core.entity.UserInfoEntity">
+        SELECT * FROM user_phone_info WHERE uid = #{uid}
+    </select>
+
+    <select id="getDriverBlackListCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM driver_black_list WHERE did = #{did}
+    </select>
+
+    <select id="getUserOpenPlatInfo"  resultType="com.shuabao.core.entity.UserOpenPlatInfoEntity">
+        SELECT * FROM user_open_plat_info WHERE openId = #{openId} AND regType = #{regType}
+    </select>
+
+    <insert id="addUserInfo" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        INSERT INTO ${tableName} (uid,nickname,avatar,sex, pwd,salt,regType,cid,lastlogintime,logTime,token)
+        VALUES (#{uid}, #{nickname},#{avatar},#{sex},#{pwd},#{salt},#{regType},#{cid},#{lastlogintime},#{logTime},#{token})
+    </insert>
+
+    <insert id="addUserPhoneInfo" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        INSERT INTO user_phone_info (uid,phone,countryCode)
+        VALUES (#{uid}, #{phone},#{countryCode})
+    </insert>
+
+    <insert id="addNewRegisterLog" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        INSERT INTO new_register_log (did,uid,cid,ip,os,`version`,regType,pkg,model,lang,logTime)
+        VALUES (#{did},#{uid},#{cid},#{ip},#{os},#{version},#{regType},#{pkg},#{model},#{lang},#{logTime})
+    </insert>
+
+    <insert id="addUserLoginLog" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        INSERT INTO user_login_log (uid,did,cid,ip,os,`version`,pkg,logTime)
+        VALUES (#{uid},#{did},#{cid},#{ip},#{os},#{version},#{pkg},#{logTime})
+        ON DUPLICATE KEY UPDATE did = #{did}, cid = #{cid},ip = #{ip},os = #{os},version = #{version},pkg = #{pkg},logTime = #{logTime}
+    </insert>
+
+    <insert id="addUserOpenPlatInfo" parameterType="com.shuabao.core.entity.UserOpenPlatInfoEntity">
+        INSERT INTO user_open_plat_info (uid,openId,regType,nickname,avatar,logTime)
+        VALUES (#{uid},#{openId},#{regType},#{nickname},#{avatar},#{logTime})
+    </insert>
+
+    <update id="updateUserPasswrod" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        UPDATE ${tableName} SET pwd = #{pwd}, salt = #{salt} WHERE uid = #{uid}
+    </update>
+
+    <update id="updateUserToken" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        UPDATE ${tableName} SET token = #{token}
+        <if test="lastlogintime != null">
+            , lastlogintime = #{lastlogintime}
+        </if>
+        <if test="lastlogouttime != null">
+            , lastlogouttime = #{lastlogouttime}
+        </if>
+        WHERE uid = #{uid}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.shuabao.core.entity.UserInfoEntity">
+        UPDATE ${tableName} SET uid = #{uid}
+        <if test="nickname != null">
+            , nickname = #{nickname}
+        </if>
+        <if test="avatar != null">
+            , avatar = #{avatar}
+        </if>
+        <if test="sex != 0">
+            , sex = #{sex}
+        </if>
+        <if test="addr != null">
+            , addr = #{addr}
+        </if>
+        <if test="sign != null">
+            , sign = #{sign}
+        </if>
+        <if test="level != 0">
+            , `level` = #{level}
+        </if>
+        <if test="height != 0">
+            , height = #{height}
+        </if>
+        <if test="education != 0">
+            , education = #{education}
+        </if>
+        <if test="marriage != 0">
+            , marriage = #{marriage}
+        </if>
+        <if test="income != null">
+            , income = #{income}
+        </if>
+        <if test="expectedtime != 0">
+            , expectedtime = #{expectedtime}
+        </if>
+        <if test="viplevel != 0">
+            , viplevel = #{viplevel}
+        </if>
+        <if test="bonds != 0">
+            , bonds = bonds + #{bonds}
+        </if>
+        <if test="gold != 0">
+            , gold = gold + #{gold}
+        </if>
+        <if test="price != 0">
+            , price = #{price}
+        </if>
+        <if test="preview != 0">
+            , preview = #{preview}
+        </if>
+        <if test="status != 0">
+            , status = #{status}
+        </if>
+        <if test="birth != null">
+            , birth = #{birth}
+        </if>
+        WHERE uid = #{uid}
+        <if test="bonds != 0">
+            and bonds + #{bonds} >= 0
+        </if>
+        <if test="gold != 0">
+            and gold + #{gold} >= 0
+        </if>
+    </update>
+
+    <select id="getUserInfoByUid" parameterType="com.shuabao.core.entity.UserInfoEntity" resultType="com.shuabao.core.entity.UserInfoEntity">
+        SELECT * FROM ${tableName} WHERE uid = #{uid}
+    </select>
+
+    <insert id="addUserChangeLog" parameterType="com.shuabao.core.entity.UserChangeLogEntity">
+        insert into user_change_log(uid, num, logtype)
+		VALUES (#{uid}, #{num}, #{logtype})
+    </insert>
+
+</mapper>
